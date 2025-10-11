@@ -1,0 +1,101 @@
+// Example program
+#include <iostream>
+#include <string>
+
+#define NUM_ROUTES 2
+#define MAX_SLOTS 20
+
+struct Routes
+{
+  int id;
+  int start;    // minutes from midnight
+  int interval; // minutes
+  const char *name;
+  int pathid;
+};
+
+Routes routes[NUM_ROUTES] = {
+    {10, 0, 5, "Ams-Gdx", 1},
+    {12, 2, 5, "Ams-Par", 2},
+};
+
+int current_minute_of_hour = 14;
+int myarr [2] = {0, 0};
+int arr2d [NUM_ROUTES][MAX_SLOTS] = {};
+
+
+int Timeslots(const Routes routes[]) {
+      for (int i=0; i<NUM_ROUTES; i++) {
+        // std::cout << routes[i].id << "\n";
+        arr2d[i][0]=routes[i].start;
+        
+        for (int j=1; j<MAX_SLOTS; j++) {
+            if (j*routes[i].interval + routes[i].start >=60) {
+                arr2d[i][j]=0;
+            }
+            else {
+            
+            arr2d[i][j]=arr2d[i][j-1] + routes[i].interval;
+            };
+        }
+  }
+  return 0;
+}
+
+int Print2DArray(int arr2d[NUM_ROUTES][MAX_SLOTS]) {
+      for (int i=0; i<NUM_ROUTES; i++) {
+      for (int j=0; j<MAX_SLOTS; j++) {
+          std::cout << arr2d[i][j] << " ";
+          
+  }
+  std::cout <<  "\n";
+}
+return 0;
+}
+
+int FindClosestSlot(int arr2d[NUM_ROUTES][MAX_SLOTS], int current_minute_of_hour) {
+    
+    for (int i=0; i<NUM_ROUTES; i++) {
+        for (int j=0; j<MAX_SLOTS; j++) {
+            if (arr2d[i][j] > current_minute_of_hour) {
+                if (myarr[1] ==0) {
+                myarr[0] = i;
+                myarr[1] = arr2d[i][j];
+                break;
+            } else if (arr2d[i][j] < myarr[1]){
+                myarr[0] = i;
+                myarr[1] = arr2d[i][j];
+                break;
+            }
+    }
+    
+}
+}
+return 0;
+}
+
+int Reset2DArray(int arr2d[NUM_ROUTES][MAX_SLOTS]) {
+      for (int i=0; i<NUM_ROUTES; i++) {
+      for (int j=0; j<MAX_SLOTS; j++) {
+          arr2d[i][j]=0;
+          
+  }
+}
+return 0;
+}
+
+
+
+int main()
+{
+
+  Timeslots(routes);
+  Print2DArray(arr2d);
+  FindClosestSlot(arr2d, current_minute_of_hour);
+  for (int i=0; i<2; i++) {
+      std::cout << myarr[i] << " ";
+  }
+  
+  
+
+}
