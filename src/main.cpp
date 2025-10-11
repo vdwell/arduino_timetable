@@ -38,40 +38,11 @@ void setup()
   setStampZone(2); // часовой пояс
   Wire.begin();
   rtc.begin();
-
-  Serial.print("OK: ");
-  Serial.println(rtc.isOK()); // RTC работает
-
-  Serial.print("Reset: ");
-  Serial.println(rtc.isReset()); // сброс питания (батарейки)
-
-  // был сброс питания RTC, время некорректное
+  rtc.setBuildTime();
   if (rtc.isReset())
-  {
-    rtc.setBuildTime(); // установить время компиляции прошивки
-                        // rtc.setTime(2025, 1, 30, 12, 45, 0); // установить время вручную
-  }
 
-  // вывести в Datime
-  Datime dt = rtc.getTime();
-  Serial.println(dt.year);
-  Serial.println(dt.month);
-  Serial.println(dt.day);
-  Serial.println(dt.hour);
-  Serial.println(dt.minute);
-  Serial.println(dt.second);
-
-  lcd.init();      // инициализация
+    lcd.init();    // инициализация
   lcd.backlight(); // включить подсветку
-
-  lcd.setCursor(0, 0); // столбец 1 строка 0
-  lcd.print("Hello, world!");
-  delay(2000);
-  lcd.clear();
-  lcd.setCursor(0, 0); // столбец 4 строка 1~
-  lcd.print("Amsterdam 11:00");
-  lcd.setCursor(0, 1); // столбец 4 строка 1
-  lcd.print("Guadelx 11:08");
 }
 
 void loop()
@@ -105,7 +76,7 @@ void loop()
     default:
       break;
     }
-
+    // switch to the next mode
     mode = Modes((int)mode + 1);
     if (mode == Modes::_len)
     {
