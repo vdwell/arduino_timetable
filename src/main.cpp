@@ -32,8 +32,8 @@ struct Routes
 };
 
 Routes routes[NUM_ROUTES] = {
-    {0, 10, 0, 5, "Ams-Gdx", 1},
-    {1, 12, 2, 5, "Ams-Par", 2},
+    {0, 10, 2, 4, "Ams-Gdx", 1},
+    {1, 12, 4, 4, "Ams-Par", 2},
 };
 
 int current_second_of_hour = 150;
