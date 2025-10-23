@@ -88,7 +88,7 @@ int FindClosestSlot(int arr2d[NUM_ROUTES][MAX_SLOTS], int current_second_of_hour
       }
     }
   }
-  // return 0;
+  return 0;
 }
 
 void Reset2DArray(int arr2d[NUM_ROUTES][MAX_SLOTS])
@@ -102,6 +102,15 @@ void Reset2DArray(int arr2d[NUM_ROUTES][MAX_SLOTS])
   }
 }
 
+void PrintZero(int val)
+{
+  if (val < 10)
+  {
+    lcd.print("0");
+  }
+  lcd.print("");
+}
+
 void setup()
 {
   Serial.begin(9600);
@@ -109,11 +118,21 @@ void setup()
   setStampZone(2); // часовой пояс
   Wire.begin();
   rtc.begin();
-  // был сброс питания RTC, время некорректное
-  if (rtc.isReset())
-  {
-    rtc.setBuildTime(); // установить время компиляции прошивки
-  }
+  Serial.print("OK: ");
+  Serial.println(rtc.isOK());
+
+  Serial.print("Reset: ");
+  Serial.println(rtc.isReset());
+  rtc.setBuildTime(); // установить время компиляции прошивки
+
+  Datime dt = rtc.getTime();
+  Serial.println(dt.year);
+  Serial.println(dt.month);
+  Serial.println(dt.day);
+  Serial.println(dt.hour);
+  Serial.println(dt.minute);
+  Serial.println(dt.second);
+
   lcd.init();      // инициализация
   lcd.backlight(); // включить подсветку
 }
@@ -138,11 +157,14 @@ void loop()
       lcd.print(":");
       lcd.print(dt.day);
       lcd.setCursor(0, 1);
+      lcd.print((dt.hour < 10) ? "0" : "");
       lcd.print(dt.hour);
       lcd.print(":");
+      lcd.print((dt.minute < 10) ? "0" : "");
       lcd.print(dt.minute);
       lcd.print(":");
-      lcd.print(dt.second);
+      lcd.print((dt.hour < 10) ? "0" : "");
+      lcd.print(dt.hour);
       break;
     }
     case TT:
@@ -165,8 +187,10 @@ void loop()
       lcd.print(" ");
       lcd.print(routes[myarr[0]].name);
       lcd.setCursor(0, 1);
+      lcd.print((dt.hour < 10) ? "0" : "");
       lcd.print(dt.hour);
       lcd.print(":");
+      lcd.print((myarr[1] / 60 < 10) ? "0" : "");
       lcd.print(myarr[1] / 60);
       lcd.print(":00");
       lcd.print(" Spr: ");
