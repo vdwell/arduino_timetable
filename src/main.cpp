@@ -123,7 +123,13 @@ void setup()
 
   Serial.print("Reset: ");
   Serial.println(rtc.isReset());
-  rtc.setBuildTime(); // установить время компиляции прошивки
+
+  // был сброс питания RTC, время некорректное
+  if (rtc.isReset())
+  {
+    rtc.setBuildTime(); // установить время компиляции прошивки
+  }
+  // rtc.setTime(2000, 1, 30, 12, 45, 0);
 
   Datime dt = rtc.getTime();
   Serial.println(dt.year);
