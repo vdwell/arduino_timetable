@@ -118,13 +118,18 @@ void setup()
   setStampZone(2); // часовой пояс
   Wire.begin();
   rtc.begin();
+
   Serial.print("OK: ");
   Serial.println(rtc.isOK());
 
   Serial.print("Reset: ");
   Serial.println(rtc.isReset());
-  rtc.setBuildTime(); // установить время компиляции прошивки
-
+  if (rtc.isReset())
+  {
+    rtc.setBuildTime(); // установить время компиляции прошивки
+                        // rtc.setTime(2025, 1, 30, 12, 45, 0); // установить время вручную
+  }
+  // rtc.setTime(2000, 1, 30, 12, 45, 0);
   Datime dt = rtc.getTime();
   Serial.println(dt.year);
   Serial.println(dt.month);
