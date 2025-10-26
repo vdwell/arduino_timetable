@@ -123,8 +123,13 @@ void setup()
 
   Serial.print("Reset: ");
   Serial.println(rtc.isReset());
-  rtc.setBuildTime(); // установить время компиляции прошивки
-
+  // был сброс питания RTC, время некорректное
+  if (rtc.isReset())
+  {
+    rtc.setBuildTime(); // установить время компиляции прошивки
+                        // rtc.setTime(2025, 1, 30, 12, 45, 0); // установить время вручную
+  }
+  // rtc.setTime(2000, 1, 30, 12, 45, 0);
   Datime dt = rtc.getTime();
   Serial.println(dt.year);
   Serial.println(dt.month);
@@ -147,7 +152,7 @@ void loop()
     {
     case CLOCK:
     {
-      myTimer1 = millis();
+      // myTimer1 = millis();
       lcd.clear();
       lcd.setCursor(0, 0);
       dt = rtc.getTime();
@@ -163,8 +168,8 @@ void loop()
       lcd.print((dt.minute < 10) ? "0" : "");
       lcd.print(dt.minute);
       lcd.print(":");
-      lcd.print((dt.hour < 10) ? "0" : "");
-      lcd.print(dt.hour);
+      lcd.print((dt.second < 10) ? "0" : "");
+      lcd.print(dt.second);
       break;
     }
     case TT:
